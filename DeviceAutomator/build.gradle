@@ -1,6 +1,8 @@
-apply plugin: 'com.android.library'
-apply plugin: 'maven'
-apply plugin: 'signing'
+plugins {
+    id 'com.android.library'
+    id 'de.marcphilipp.nexus-publish'
+    id 'signing'
+}
 
 version = '1.0.0-SNAPSHOT'
 
@@ -9,24 +11,23 @@ android {
     buildToolsVersion '30.0.2'
 
     defaultConfig {
-        minSdkVersion 18
-        targetSdkVersion 30
-        versionCode 6
-        versionName version
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
     testOptions {
         unitTests {
             includeAndroidResources = true
         }
-    }
-
-    lintOptions {
-        warning 'InvalidPackage'
-        textReport true
-        textOutput 'stdout'
     }
 }
 
@@ -43,7 +44,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:2.28.2'
 }
 
-/* maven deploy + signing */
+// region signing and publishing
+
 task javadocs(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
@@ -51,12 +53,12 @@ task javadocs(type: Javadoc) {
 }
 
 task javadocsJar(type: Jar, dependsOn: javadocs) {
-    classifier = 'javadoc'
+    archiveClassifier.set('javadoc')
     from javadocs.destinationDir
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs
 }
 
@@ -66,56 +68,61 @@ artifacts {
 }
 
 signing {
-    required { !version.endsWith("SNAPSHOT") }
-    sign configurations.archives
+    required {
+        !version.endsWith("SNAPSHOT") && !version.endsWith("DEVELOPMENT")
+    }
+    sign publishing.publications
 }
 
-def sonatypeUsername = System.env['SONATYPE_USERNAME']
-def sonatypePassword = System.env['SONATYPE_PASSWORD']
-
-uploadArchives {
+nexusPublishing {
+    // give nexus sonatype more time to initialize the staging repository
+    clientTimeout = Duration.ofMinutes(3)
     repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+        sonatype()
+    }
+}
 
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-            snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
 
-            pom.setArtifactId 'device-automator'
+                groupId = 'com.braintreepayments'
+                artifactId = 'device-automator'
+                version = rootProject.versionName
 
-            pom.project {
-                name 'device-automator'
-                groupId 'com.lukekorth'
-                version android.defaultConfig.versionName
-                packaging 'jar'
-                description 'An easy to use, Espresso like, syntax on top of the Android UI Automator testing framework'
-                url 'https://github.com/lkorth/device-automator'
+                pom {
+                    name = 'device-automator'
+                    packaging = 'aar'
+                    description = 'An easy to use, Espresso like, syntax on top of the Android UI Automator testing framework'
+                    url = 'https://github.com/braintree/device-automator'
 
-                scm {
-                    url 'scm:git@github.com:lkorth/device-automator.git'
-                    connection 'scm:git@github.com:lkorth/device-automator.git'
-                    developerConnection 'scm:git@github.com:lkorth/device-automator.git'
-                }
-
-                licenses {
-                    license {
-                        name 'The MIT License (MIT)'
-                        url 'http://opensource.org/licenses/MIT'
-                        distribution 'repo'
+                    scm {
+                        url = 'scm:git@github.com:braintree/device-automator.git'
+                        connection = 'scm:git@github.com:braintree/device-automator.git'
+                        developerConnection = 'scm:git@github.com:braintree/device-automator.git'
                     }
-                }
 
-                developers {
-                    developer {
-                        id 'lkorth'
-                        name 'Luke Korth'
+                    developers {
+                        developer {
+                            id = 'devs'
+                            name = 'Braintree Payments'
+                        }
+                    }
+
+                    licenses {
+                        license {
+                            name = 'MIT'
+                            url = 'http://opensource.org/licenses/MIT'
+                            distribution = 'repo'
+                        }
                     }
                 }
             }
         }
     }
 }
+
+// endregion
