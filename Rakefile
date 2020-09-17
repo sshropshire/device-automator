@@ -61,8 +61,6 @@ def post_release(version)
   $stdin.gets
 
   sh "git push origin master #{version}"
-
-  $stdin.gets
 end
 
 task :assumptions do
