@@ -10,6 +10,11 @@ apps and the device itself. The Device Automator API very closely resembles the
 API and similarly encourages test authors to think in terms of what a user might do while
 interacting with the application - locating UI elements and interacting with them.
 
+
+## Origins
+
+Special thanks to Luke Korth (@lkorth) for the [original device-automator](https://github.com/lkorth/device-automator) implementation.
+
 ## Setup
 
 ### Download device-automator
