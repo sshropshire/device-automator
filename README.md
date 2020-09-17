@@ -13,7 +13,7 @@ interacting with the application - locating UI elements and interacting with the
 
 ## Origins
 
-Special thanks to Luke Korth ([@lkorth](https://github.com/lkorth)) for the [original device-automator](https://github.com/lkorth/device-automator) implementation.
+Special thanks to Luke Korth ([@lkorth](https://github.com/lkorth)) for the original [device-automator](https://github.com/lkorth/device-automator) implementation.
 
 ## Setup
 
