@@ -27,14 +27,6 @@ dependencies {
 }
 ```
 
-To use the latest build from the `master` branch use:
-
-```groovy
-dependencies {
-  androidTestCompile 'com.braintreepayments:device-automator:1.0.0-SNAPSHOT'
-}
-```
-
 ### Set the instrumentation runner
 
 Add the following line to your `build.gradle` file in `android.defaultConfig`:
