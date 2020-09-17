@@ -1,10 +1,13 @@
-package com.lukekorth.deviceautomator;
+package com.braintreepayments;
 
 import androidx.test.runner.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import android.view.KeyEvent;
+
+import com.braintreepayments.DeviceAutomator;
+import com.braintreepayments.UiObjectMatcher;
 
 import org.junit.Before;
 import org.junit.Test;

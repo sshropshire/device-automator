@@ -1,8 +1,10 @@
-package com.lukekorth.deviceautomator;
+package com.braintreepayments;
 
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
+
+import com.braintreepayments.AutomatorAction;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
