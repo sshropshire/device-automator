@@ -1,8 +1,10 @@
-package com.lukekorth.deviceautomator;
+package com.braintreepayments;
 
 import android.graphics.Rect;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
+
+import com.braintreepayments.AutomatorAssertion;
 
 import junit.framework.AssertionFailedError;
 

@@ -1,4 +1,4 @@
-package com.lukekorth.deviceautomator;
+package com.braintreepayments;
 
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;

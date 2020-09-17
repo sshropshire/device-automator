@@ -1,4 +1,4 @@
-package com.lukekorth.deviceautomator;
+package com.braintreepayments;
 
 import android.graphics.Rect;
 import androidx.test.uiautomator.By;

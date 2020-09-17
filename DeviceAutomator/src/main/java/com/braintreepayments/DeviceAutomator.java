@@ -1,4 +1,4 @@
-package com.lukekorth.deviceautomator;
+package com.braintreepayments;
 
 import android.content.Context;
 import android.content.Intent;
